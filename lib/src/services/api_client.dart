@@ -1,3 +1,4 @@
+import 'package:gif_ted/src/models/giphy_response_model.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
 import 'package:gif_ted/src/models/giphy_item_model.dart';
@@ -11,8 +12,8 @@ class Apis {
 
 @RestApi(baseUrl: "https://api.giphy.com/v1/gifs")
 abstract class APIClient {
-  factory APIClient(Dio dio) = _APIClient;
+  factory APIClient(Dio dio, {String baseUrl}) = _APIClient;
 
   @GET(Apis.trending)
-  Future<List<GiphyItemModel>> giphyTrendingData();
+  Future<dynamic> giphyTrendingData();
 }

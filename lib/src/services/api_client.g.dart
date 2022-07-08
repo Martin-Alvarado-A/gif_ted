@@ -18,21 +18,18 @@ class _APIClient implements APIClient {
   String? baseUrl;
 
   @override
-  Future<List<GiphyItemModel>> giphyTrendingData() async {
+  Future<dynamic> giphyTrendingData() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    final _result = await _dio.fetch<List<dynamic>>(_setStreamType<
-        List<GiphyItemModel>>(Options(
+    final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
             method: 'GET', headers: _headers, extra: _extra)
         .compose(_dio.options,
             '/trending?api_key=RERwoaJz4GoOn7KdJrJVgOsUFxhQBMZl&limit=20&rating=g',
             queryParameters: queryParameters, data: _data)
         .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    var value = _result.data!
-        .map((dynamic i) => GiphyItemModel.fromJson(i as Map<String, dynamic>))
-        .toList();
+    final value = _result.data;
     return value;
   }
 

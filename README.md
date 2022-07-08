@@ -1,6 +1,6 @@
 # gif_ted
 
-A new Flutter project.
+A test Flutter project that calls the Giphy API and generates a list view of the trending gifs.
 
 ## Getting Started
 

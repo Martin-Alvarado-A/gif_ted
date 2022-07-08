@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-const kLoginButtonTextStyle = TextStyle(
-  color: Colors.lightBlueAccent,
+const loginButtonTextStyle = TextStyle(
+  color: Colors.white,
   fontWeight: FontWeight.bold,
   fontSize: 18.0,
 );
 
-const kTextFieldDecoration = InputDecoration(
+const textFieldDecoration = InputDecoration(
   hintText: 'Enter a value',
   contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
   border: OutlineInputBorder(

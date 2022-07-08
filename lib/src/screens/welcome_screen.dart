@@ -76,7 +76,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               height: 48.0,
             ),
             RoundedButton(
-              title: 'Log In',
+              title: 'Start',
               colour: Colors.blue,
               onPressed: () {
                 Future.delayed(Duration.zero, () {

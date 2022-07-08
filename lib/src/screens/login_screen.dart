@@ -57,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   email = value;
                 },
                 decoration:
-                    kTextFieldDecoration.copyWith(hintText: 'Enter your email'),
+                    textFieldDecoration.copyWith(hintText: 'Enter your email'),
               ),
               SizedBox(
                 height: 8.0,
@@ -68,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 onChanged: (value) {
                   password = value;
                 },
-                decoration: kTextFieldDecoration.copyWith(
+                decoration: textFieldDecoration.copyWith(
                     hintText: 'Enter your password'),
               ),
               SizedBox(
@@ -76,7 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               RoundedButton(
                 title: 'Log In',
-                colour: Colors.lightBlueAccent,
+                colour: Colors.blue,
                 onPressed: () async {
                   setState(() {
                     showSpinner = true;

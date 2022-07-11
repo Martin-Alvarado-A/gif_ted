@@ -18,14 +18,6 @@ class _LoginScreenState extends State<LoginScreen> {
   String email = "";
   String password = "";
 
-  void getGiphyGifs() async {
-    // var List<GifItem> giphyData = await GiphyModel().getTrendingGifs();
-    // print(giphyData);
-
-    Navigator.pushNamed(context, GifListScreen.id);
-    // Navigator.pushNamed(context, GifListScreen.id, arguments: GifScreenArguments(giphyData));
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,7 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     final user = (email == "test" && password == "test");
 
                     if (user) {
-                      getGiphyGifs();
+                      Navigator.pushNamed(context, GifListScreen.id);
                     }
 
                     setState(() {

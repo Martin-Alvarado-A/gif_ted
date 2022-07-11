@@ -18,19 +18,19 @@ class _APIClient implements APIClient {
   String? baseUrl;
 
   @override
-  Future<GiphyResponse> giphyTrendingData() async {
+  Future<GiphyResponseModel> giphyTrendingData() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch<Map<String, dynamic>>(_setStreamType<
-        GiphyResponse>(Options(
+        GiphyResponseModel>(Options(
             method: 'GET', headers: _headers, extra: _extra)
         .compose(_dio.options,
             '/trending?api_key=RERwoaJz4GoOn7KdJrJVgOsUFxhQBMZl&limit=20&rating=g',
             queryParameters: queryParameters, data: _data)
         .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = GiphyResponse.fromJson(_result.data!);
+    final value = GiphyResponseModel.fromJson(_result.data!);
     return value;
   }
 

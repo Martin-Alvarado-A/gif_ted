@@ -15,5 +15,5 @@ abstract class APIClient {
   factory APIClient(Dio dio, {String baseUrl}) = _APIClient;
 
   @GET(Apis.trending)
-  Future<dynamic> giphyTrendingData();
+  Future<GiphyResponseModel> giphyTrendingData();
 }

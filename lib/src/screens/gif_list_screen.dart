@@ -67,18 +67,18 @@ class GifsList extends StatelessWidget {
     required this.gifs,
   }) : super(key: key);
 
-  final gifs;
+  final GiphyResponseModel gifs;
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: gifs["data"].length,
+      itemCount: gifs.data.length,
       itemBuilder: (BuildContext context, int index) {
-        final item = gifs["data"][index];
-        final String previewURL = item["images"]["preview_gif"]["url"] ?? '';
+        final item = gifs.data[index];
+        final String previewURL = item.images.previewGif.url;
 
         return ListTile(
-          title: Text("id: ${item["id"]}"),
+          title: Text("id: ${item.id}"),
           leading: Image.network(previewURL),
         );
       },

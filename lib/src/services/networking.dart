@@ -11,7 +11,7 @@ class Networking {
   getTrendingGifs() async {
     print("🔎 | Networking | getTrendingGifs > before data");
 
-    dynamic giphyModel = await mClient.giphyTrendingData();
+    GiphyResponseModel giphyModel = await mClient.giphyTrendingData();
 
     print("🔎 | Networking | getTrendingGifs > after data");
 

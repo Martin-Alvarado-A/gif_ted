@@ -8,9 +8,9 @@ class Networking {
     mClient = APIClient(Dio());
   }
 
+  /// Call the client api requesting the trending data with the offset parameter
   getTrendingGifs({required int offset}) async {
     GiphyResponseModel giphyModel = await mClient.giphyTrendingData(offset);
-
     return giphyModel;
   }
 }

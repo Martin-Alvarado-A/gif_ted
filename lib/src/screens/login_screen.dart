@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:gif_ted/src/components/gif_item.dart';
 import 'package:gif_ted/src/components/rounded_button.dart';
-import 'package:gif_ted/src/models/gif_screen_arguments.dart';
+import 'package:gif_ted/src/screens/gif_list_screen.dart';
 import 'package:gif_ted/src/styles/constants.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import 'gif_list_screen.dart';
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({Key? key}) : super(key: key);
+
   static const String id = 'login_screen';
+
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  LoginScreenState createState() => LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class LoginScreenState extends State<LoginScreen> {
   bool showSpinner = false;
-  // final _auth = FirebaseAuth.instance;
   String email = "";
   String password = "";
 
@@ -25,7 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: ModalProgressHUD(
         inAsyncCall: showSpinner,
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.0),
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -33,13 +33,13 @@ class _LoginScreenState extends State<LoginScreen> {
               Flexible(
                 child: Hero(
                   tag: 'logo',
-                  child: Container(
+                  child: SizedBox(
                     height: 200.0,
                     child: Image.asset('assets/logo.png'),
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 48.0,
               ),
               TextField(
@@ -48,10 +48,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 onChanged: (value) {
                   email = value;
                 },
-                decoration:
-                    textFieldDecoration.copyWith(hintText: 'Enter your email'),
+                decoration: textFieldDecoration.copyWith(
+                  hintText: 'Enter your email',
+                ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 8.0,
               ),
               TextField(
@@ -61,9 +62,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   password = value;
                 },
                 decoration: textFieldDecoration.copyWith(
-                    hintText: 'Enter your password'),
+                  hintText: 'Enter your password',
+                ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 24.0,
               ),
               RoundedButton(
@@ -74,12 +76,15 @@ class _LoginScreenState extends State<LoginScreen> {
                     showSpinner = true;
                   });
                   try {
-                    await Future.delayed(const Duration(seconds: 2));
-                    // final user = await _auth.signInWithEmailAndPassword(
-                    //     email: email, password: password);
+                    await Future.delayed(
+                      const Duration(seconds: 2),
+                    );
                     final user = (email == "test" && password == "test");
 
                     if (user) {
+                      // Remove next line if not using Future.delayed()
+                      if (!mounted) return;
+                      //
                       Navigator.pushNamed(context, GifListScreen.id);
                     }
 
@@ -87,7 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       showSpinner = false;
                     });
                   } catch (e) {
-                    print(e);
+                    debugPrint('$e');
                   }
                 },
               ),

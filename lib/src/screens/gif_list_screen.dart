@@ -1,8 +1,5 @@
-// import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:gif_ted/src/models/giphy_item_model.dart';
 import 'package:gif_ted/src/models/giphy_response_model.dart';
-// import 'package:gif_ted/src/components/gif_item.dart';
 import 'package:gif_ted/src/services/networking.dart';
 
 class GifListScreen extends StatelessWidget {
@@ -33,7 +30,7 @@ class GifListScreen extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: FutureBuilder<dynamic>(
-            future: _networking.getTrendingGifs(),
+            future: _networking.getTrendingGifs(offset: 0),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               print("🔎 | Gif List Screen | FutureBuilder");
               if (snapshot.connectionState == ConnectionState.waiting) {

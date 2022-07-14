@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'src/screens/welcome_screen.dart';
-import 'src/screens/login_screen.dart';
-import 'src/screens/gif_list_screen.dart';
+import 'package:gif_ted/src/screens/gif_detail_screen.dart';
+import 'package:gif_ted/src/screens/settings_screen.dart';
+import 'package:gif_ted/src/screens/welcome_screen.dart';
+import 'package:gif_ted/src/screens/login_screen.dart';
+import 'package:gif_ted/src/screens/gif_list_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,9 +22,11 @@ class MyApp extends StatelessWidget {
       // home: WelcomeScreen(),
       initialRoute: WelcomeScreen.id,
       routes: {
-        WelcomeScreen.id: (context) => WelcomeScreen(),
-        LoginScreen.id: (context) => LoginScreen(),
+        WelcomeScreen.id: (context) => const WelcomeScreen(),
+        LoginScreen.id: (context) => const LoginScreen(),
         GifListScreen.id: (context) => GifListScreen(),
+        GifDetailScreen.id: (context) => const GifDetailScreen(),
+        SettingsScreen.id: (context) => const SettingsScreen(),
       },
     );
   }

@@ -8,12 +8,8 @@ class Networking {
     mClient = APIClient(Dio());
   }
 
-  getTrendingGifs() async {
-    print("🔎 | Networking | getTrendingGifs > before data");
-
-    GiphyResponseModel giphyModel = await mClient.giphyTrendingData();
-
-    print("🔎 | Networking | getTrendingGifs > after data");
+  getTrendingGifs({required int offset}) async {
+    GiphyResponseModel giphyModel = await mClient.giphyTrendingData(offset);
 
     return giphyModel;
   }

@@ -10,7 +10,7 @@ part of 'gif_ted_data_provider.dart';
 
 class _GiphyAPIClient implements GiphyAPIClient {
   _GiphyAPIClient(this._dio, {this.baseUrl}) {
-    baseUrl ??= 'https://api.giphy.com/v1/gifs/search';
+    baseUrl ??= 'https://api.giphy.com/v1/gifs/';
   }
 
   final Dio _dio;
@@ -27,7 +27,7 @@ class _GiphyAPIClient implements GiphyAPIClient {
         GiphyResponseModel>(Options(
             method: 'GET', headers: _headers, extra: _extra)
         .compose(_dio.options,
-            '?api_key=RERwoaJz4GoOn7KdJrJVgOsUFxhQBMZl&q=trending&limit=20&offset=${offset}&rating=g&lang=en',
+            'trending?api_key=RERwoaJz4GoOn7KdJrJVgOsUFxhQBMZl&limit=20&offset=${offset}&rating=g',
             queryParameters: queryParameters, data: _data)
         .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = GiphyResponseModel.fromJson(_result.data!);

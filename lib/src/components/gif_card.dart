@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gif_ted/src/data/models/giphy_item_model.dart';
 import 'package:gif_ted/src/screens/gif_detail_screen.dart';
@@ -51,10 +52,22 @@ class GifCard extends StatelessWidget {
                 ),
               ),
             ),
-            child: Image.network(
-              // TODO: Add loadingBuilder logic
-              previewURL,
+            child: CachedNetworkImage(
+              imageUrl: previewURL,
               fit: BoxFit.cover,
+              progressIndicatorBuilder: (context, url, downloadProgress) =>
+                  Padding(
+                padding: const EdgeInsets.all(64),
+                child: CircularProgressIndicator(
+                  value: downloadProgress.progress,
+                  backgroundColor: Colors.white,
+                  color: Colors.blueAccent,
+                  strokeWidth: 8,
+                ),
+              ),
+              errorWidget: (context, url, error) => const Icon(
+                Icons.error,
+              ),
             ),
           ),
         ),

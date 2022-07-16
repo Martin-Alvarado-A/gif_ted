@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:gif_ted/src/models/giphy_item_model.dart';
-
-import 'package:gif_ted/src/services/networking.dart';
+import 'package:gif_ted/cubit/gif_ted_cubit.dart';
+import 'package:gif_ted/src/data/models/giphy_item_model.dart';
+import 'package:gif_ted/src/data/models/giphy_response_model.dart';
+import 'package:gif_ted/src/data/repository.dart';
 import 'package:gif_ted/src/components/gif_card.dart';
 import 'package:gif_ted/src/styles/constants.dart';
 import 'package:gif_ted/src/screens/settings_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GifListScreen extends StatelessWidget {
   GifListScreen({Key? key}) : super(key: key);
 
   static const String id = 'gif_list_screen';
 
-  final _networking = Networking();
+  final _repo = Repository();
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<dynamic>(
-      future: _networking.getTrendingGifs(offset: 0),
+      future: _repo.getTrendingGifs(offset: 0),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
@@ -27,7 +29,16 @@ class GifListScreen extends StatelessWidget {
 
         if (snapshot.connectionState == ConnectionState.done &&
             snapshot.hasData) {
-          final gifs = snapshot.data;
+          final GiphyResponseModel snapshotData = snapshot.data;
+          List<GiphyItemModel> gifsList = snapshotData.data;
+          int gifsOffset = snapshotData.pagination.offset;
+
+          final state = context.watch<GifTedCubit>().state;
+
+          if (state is GifTedResponse) {
+            gifsList = state.dataList;
+            gifsOffset = state.pagination.offset;
+          }
 
           return CustomScrollView(
             // Reduced cacheExtent to show off the progress indicator and image placeholder
@@ -61,22 +72,21 @@ class GifListScreen extends StatelessWidget {
                       BuildContext context,
                       int index,
                     ) {
-                      GiphyItemModel item = gifs.data[index];
+                      GiphyItemModel item = gifsList[index];
 
-                      print(
-                          'sliverGrid is building index ${index + 1} of ${gifs.data.length}');
-                      if (index + 1 >= gifs.data.length) {
-                        // TODO: using bloc state management,
-                        // change the offset of the next call and add the new
-                        // items on a state stored list to change this widget
-                        print('LOADING NEXT ONES');
+                      debugPrint('showing #${index + 1} of ${gifsList.length}');
+                      if (index + 1 >= gifsList.length) {
+                        context.read<GifTedCubit>().getMoreGifs(
+                              currentList: gifsList,
+                              offset: gifsOffset,
+                            );
                       }
 
                       return GifCard(
                         item: item,
                       );
                     },
-                    childCount: gifs.data.length,
+                    childCount: gifsList.length,
                   ),
                 ),
               ),

@@ -1,4 +1,4 @@
-import 'package:gif_ted/src/models/giphy_item_model.dart';
+import 'package:gif_ted/src/data/models/giphy_item_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'giphy_response_model.g.dart';

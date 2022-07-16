@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gif_ted/src/models/giphy_item_model.dart';
+import 'package:gif_ted/src/data/models/giphy_item_model.dart';
 import 'package:gif_ted/src/screens/gif_detail_screen.dart';
 
 class GifCard extends StatelessWidget {
@@ -52,6 +52,7 @@ class GifCard extends StatelessWidget {
               ),
             ),
             child: Image.network(
+              // TODO: Add loadingBuilder logic
               previewURL,
               fit: BoxFit.cover,
             ),

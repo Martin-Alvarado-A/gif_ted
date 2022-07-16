@@ -81,11 +81,7 @@ class WelcomeScreenState extends State<WelcomeScreen>
               title: 'Unwrap',
               colour: Colors.blue,
               onPressed: () {
-                Future.delayed(Duration.zero, () {
-                  Navigator.restorablePushNamed(context, LoginScreen.id);
-                });
-
-                // print("To Login!");
+                Navigator.restorablePushNamed(context, LoginScreen.id);
               },
             ),
           ],

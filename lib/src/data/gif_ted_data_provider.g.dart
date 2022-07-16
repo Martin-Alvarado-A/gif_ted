@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'api_client.dart';
+part of 'gif_ted_data_provider.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,8 +8,8 @@ part of 'api_client.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps
 
-class _APIClient implements APIClient {
-  _APIClient(this._dio, {this.baseUrl}) {
+class _GiphyAPIClient implements GiphyAPIClient {
+  _GiphyAPIClient(this._dio, {this.baseUrl}) {
     baseUrl ??= 'https://api.giphy.com/v1/gifs/search';
   }
 
@@ -18,7 +18,7 @@ class _APIClient implements APIClient {
   String? baseUrl;
 
   @override
-  Future<GiphyResponseModel> giphyTrendingData(offset) async {
+  Future<GiphyResponseModel> getTrendingGifs(offset) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};

@@ -7,6 +7,7 @@ import 'package:gif_ted/src/components/gif_card.dart';
 import 'package:gif_ted/src/styles/constants.dart';
 import 'package:gif_ted/src/screens/settings_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:rive/rive.dart';
 
 class GifListScreen extends StatelessWidget {
   GifListScreen({Key? key}) : super(key: key);
@@ -22,12 +23,20 @@ class GifListScreen extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
-            // TODO: Add a loading circle
-            child: Text("LOADING..."),
+            child: CircularProgressIndicator(
+              backgroundColor: Colors.white,
+              color: Colors.blueAccent,
+              strokeWidth: 8,
+            ),
           );
-        }
-
-        if (snapshot.connectionState == ConnectionState.done &&
+        } else if (snapshot.connectionState == ConnectionState.done &&
+            snapshot.hasError) {
+          return const Center(
+            child: RiveAnimation.asset(
+              'assets/jpereira-error-icon.riv',
+            ),
+          );
+        } else if (snapshot.connectionState == ConnectionState.done &&
             snapshot.hasData) {
           final GiphyResponseModel snapshotData = snapshot.data;
           List<GiphyItemModel> gifsList = snapshotData.data;
@@ -104,12 +113,11 @@ class GifListScreen extends StatelessWidget {
               ),
             ],
           );
+        } else {
+          return const Center(
+            child: Text("No data Found"),
+          );
         }
-
-        // TODO: Add an error screen (message and retry button)
-        return const Center(
-          child: Text("Error!??"),
-        );
       },
     );
   }

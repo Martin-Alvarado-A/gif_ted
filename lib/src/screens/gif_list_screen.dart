@@ -1,86 +1,123 @@
-// import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:gif_ted/src/models/giphy_item_model.dart';
-import 'package:gif_ted/src/models/giphy_response_model.dart';
-// import 'package:gif_ted/src/components/gif_item.dart';
-import 'package:gif_ted/src/services/networking.dart';
+import 'package:gif_ted/cubit/gif_ted_cubit.dart';
+import 'package:gif_ted/src/data/models/giphy_item_model.dart';
+import 'package:gif_ted/src/data/models/giphy_response_model.dart';
+import 'package:gif_ted/src/data/repository.dart';
+import 'package:gif_ted/src/components/gif_card.dart';
+import 'package:gif_ted/src/styles/constants.dart';
+import 'package:gif_ted/src/screens/settings_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:rive/rive.dart';
 
 class GifListScreen extends StatelessWidget {
   GifListScreen({Key? key}) : super(key: key);
 
   static const String id = 'gif_list_screen';
 
-  final _networking = Networking();
+  final _repo = Repository();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        leading: null,
-        actions: <Widget>[
-          IconButton(
-              icon: Icon(Icons.close),
-              onPressed: () {
-                // _auth.signOut();
-                Navigator.pop(context);
-              }),
-        ],
-        title: Text('Gifs'),
-        backgroundColor: Colors.lightBlueAccent,
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: FutureBuilder<dynamic>(
-            future: _networking.getTrendingGifs(),
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              print("🔎 | Gif List Screen | FutureBuilder");
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                print("🔎 | Gif List Screen | Waiting!");
-                return Center(
-                  child: Text("Loading..."),
-                );
-              }
+    return FutureBuilder<dynamic>(
+      future: _repo.getTrendingGifs(offset: 0),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+            child: CircularProgressIndicator(
+              backgroundColor: Colors.white,
+              color: Colors.blueAccent,
+              strokeWidth: 8,
+            ),
+          );
+        } else if (snapshot.connectionState == ConnectionState.done &&
+            snapshot.hasError) {
+          return const Center(
+            child: RiveAnimation.asset(
+              'assets/jpereira-error-icon.riv',
+            ),
+          );
+        } else if (snapshot.connectionState == ConnectionState.done &&
+            snapshot.hasData) {
+          final GiphyResponseModel snapshotData = snapshot.data;
+          List<GiphyItemModel> gifsList = snapshotData.data;
+          int gifsOffset = snapshotData.pagination.offset;
 
-              if (snapshot.connectionState == ConnectionState.done &&
-                  snapshot.hasData) {
-                print("🔎 | Gif List Screen | DATA!");
-                final gifs = snapshot.data;
-                return GifsList(gifs: gifs);
-              }
+          final state = context.watch<GifTedCubit>().state;
 
-              return const Center(
-                child: Text("done!??"),
-              );
-            },
-          ),
-        ),
-      ),
-    );
-  }
-}
+          if (state is GifTedResponse) {
+            gifsList = state.dataList;
+            gifsOffset = state.pagination.offset;
+          }
 
-class GifsList extends StatelessWidget {
-  const GifsList({
-    Key? key,
-    required this.gifs,
-  }) : super(key: key);
+          return CustomScrollView(
+            // Reduced cacheExtent to show off the progress indicator and image placeholder
+            cacheExtent: 1, // Default value is 200
+            //
+            slivers: [
+              SliverAppBar(
+                floating: true,
+                leading: Image.asset('assets/logo.png'),
+                actions: <Widget>[
+                  IconButton(
+                    icon: const Icon(Icons.settings),
+                    onPressed: () {
+                      Navigator.pushNamed(context, SettingsScreen.id);
+                    },
+                  ),
+                ],
+                title: const Text('Gifs'),
+              ),
+              SliverPadding(
+                padding: const EdgeInsets.all(appGridPaddingDoubleMd),
+                sliver: SliverGrid(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    // TODO: Control crossAxisCount with media query
+                    crossAxisCount: 2,
+                    mainAxisSpacing: appGridPaddingDoubleSm,
+                    crossAxisSpacing: appGridPaddingDoubleSm,
+                  ),
+                  delegate: SliverChildBuilderDelegate(
+                    (
+                      BuildContext context,
+                      int index,
+                    ) {
+                      GiphyItemModel item = gifsList[index];
 
-  final GiphyResponseModel gifs;
+                      debugPrint('showing #${index + 1} of ${gifsList.length}');
+                      if (index + 1 >= gifsList.length) {
+                        context.read<GifTedCubit>().getMoreGifs(
+                              currentList: gifsList,
+                              offset: gifsOffset,
+                            );
+                      }
 
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: gifs.data.length,
-      itemBuilder: (BuildContext context, int index) {
-        final item = gifs.data[index];
-        final String previewURL = item.images.previewGif.url;
-
-        return ListTile(
-          title: Text("id: ${item.id}"),
-          leading: Image.network(previewURL),
-        );
+                      return GifCard(
+                        item: item,
+                      );
+                    },
+                    childCount: gifsList.length,
+                  ),
+                ),
+              ),
+              const SliverPadding(
+                padding: EdgeInsets.all(appGridPaddingDoubleLg),
+                sliver: SliverToBoxAdapter(
+                  child: Center(
+                    child: SizedBox(
+                      height: 24,
+                      width: 24,
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        } else {
+          return const Center(
+            child: Text("No data Found"),
+          );
+        }
       },
     );
   }

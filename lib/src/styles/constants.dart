@@ -21,3 +21,7 @@ const textFieldDecoration = InputDecoration(
     borderRadius: BorderRadius.all(Radius.circular(32.0)),
   ),
 );
+
+const double appGridPaddingDoubleSm = 8.0;
+const double appGridPaddingDoubleMd = 12.0;
+const double appGridPaddingDoubleLg = 16.0;

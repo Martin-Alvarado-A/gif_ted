@@ -12,7 +12,7 @@ import 'package:rive/rive.dart';
 class GifListScreen extends StatelessWidget {
   GifListScreen({Key? key}) : super(key: key);
 
-  static const String id = 'gif_list_screen';
+  static const String id = '/gif_list_screen';
 
   final _repo = Repository();
 

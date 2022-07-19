@@ -17,7 +17,11 @@ class GifCard extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, GifDetailScreen.id);
+        Navigator.pushNamed(
+          context,
+          GifDetailScreen.id,
+          arguments: item,
+        );
       },
       child: Container(
         decoration: BoxDecoration(
@@ -48,7 +52,7 @@ class GifCard extends StatelessWidget {
                   fontSize: 10,
                   fontWeight: FontWeight.bold,
                   letterSpacing: 1,
-                  overflow: TextOverflow.fade,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ),

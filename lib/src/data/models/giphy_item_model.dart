@@ -25,6 +25,9 @@ class GiphyItemModel {
   @JsonKey(name: "is_sticker")
   final int isSticker;
 
+  @JsonKey(name: "source")
+  final String source;
+
   @JsonKey(name: "images")
   final GiphyImageModel images;
 
@@ -37,6 +40,7 @@ class GiphyItemModel {
     this.rating,
     this.isSticker,
     this.images,
+    this.source,
   );
 
   factory GiphyItemModel.fromJson(Map<String, dynamic> json) =>

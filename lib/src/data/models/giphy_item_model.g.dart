@@ -16,6 +16,7 @@ GiphyItemModel _$GiphyItemModelFromJson(Map<String, dynamic> json) =>
       json['rating'] as String,
       json['is_sticker'] as int,
       GiphyImageModel.fromJson(json['images'] as Map<String, dynamic>),
+      json['source'] as String,
     );
 
 Map<String, dynamic> _$GiphyItemModelToJson(GiphyItemModel instance) =>
@@ -27,6 +28,7 @@ Map<String, dynamic> _$GiphyItemModelToJson(GiphyItemModel instance) =>
       'title': instance.title,
       'rating': instance.rating,
       'is_sticker': instance.isSticker,
+      'source': instance.source,
       'images': instance.images,
     };
 

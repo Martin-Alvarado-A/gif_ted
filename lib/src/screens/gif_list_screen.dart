@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gif_ted/cubit/gif_ted_cubit.dart';
 import 'package:gif_ted/src/data/models/giphy_item_model.dart';
 import 'package:gif_ted/src/data/models/giphy_response_model.dart';
@@ -49,69 +50,76 @@ class GifListScreen extends StatelessWidget {
             gifsOffset = state.pagination.offset;
           }
 
-          return CustomScrollView(
-            // Reduced cacheExtent to show off the progress indicator and image placeholder
-            cacheExtent: 1, // Default value is 200
-            //
-            slivers: [
-              SliverAppBar(
-                floating: true,
-                leading: Image.asset('assets/logo.png'),
-                actions: <Widget>[
-                  IconButton(
-                    icon: const Icon(Icons.settings),
-                    onPressed: () {
-                      Navigator.pushNamed(context, SettingsScreen.id);
-                    },
-                  ),
-                ],
-                title: const Text('Gifs'),
-              ),
-              SliverPadding(
-                padding: const EdgeInsets.all(appGridPaddingDoubleMd),
-                sliver: SliverGrid(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    // TODO: Control crossAxisCount with media query
-                    crossAxisCount: 2,
-                    mainAxisSpacing: appGridPaddingDoubleSm,
-                    crossAxisSpacing: appGridPaddingDoubleSm,
-                  ),
-                  delegate: SliverChildBuilderDelegate(
-                    (
-                      BuildContext context,
-                      int index,
-                    ) {
-                      GiphyItemModel item = gifsList[index];
+          return OrientationBuilder(
+            builder: (context, orientation) {
+              int orientationCrossAxisCount =
+                  orientation == Orientation.portrait ? 2 : 3;
 
-                      debugPrint('showing #${index + 1} of ${gifsList.length}');
-                      if (index + 1 >= gifsList.length) {
-                        context.read<GifTedCubit>().getMoreGifs(
-                              currentList: gifsList,
-                              offset: gifsOffset,
-                            );
-                      }
-
-                      return GifCard(
-                        item: item,
-                      );
-                    },
-                    childCount: gifsList.length,
+              return CustomScrollView(
+                // Reduced cacheExtent to show off the progress indicator and image placeholder
+                cacheExtent: 1, // Default value is 200
+                //
+                slivers: [
+                  SliverAppBar(
+                    floating: true,
+                    leading: Image.asset('assets/logo.png'),
+                    actions: <Widget>[
+                      IconButton(
+                        icon: const Icon(Icons.settings),
+                        onPressed: () {
+                          Navigator.pushNamed(context, SettingsScreen.id);
+                        },
+                      ),
+                    ],
+                    title: const Text('Gifs'),
                   ),
-                ),
-              ),
-              const SliverPadding(
-                padding: EdgeInsets.all(appGridPaddingDoubleLg),
-                sliver: SliverToBoxAdapter(
-                  child: Center(
-                    child: SizedBox(
-                      height: 24,
-                      width: 24,
-                      child: CircularProgressIndicator(),
+                  SliverPadding(
+                    padding: const EdgeInsets.all(appGridPaddingDoubleMd),
+                    sliver: SliverGrid(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: orientationCrossAxisCount,
+                        mainAxisSpacing: appGridPaddingDoubleSm,
+                        crossAxisSpacing: appGridPaddingDoubleSm,
+                      ),
+                      delegate: SliverChildBuilderDelegate(
+                        (
+                          BuildContext context,
+                          int index,
+                        ) {
+                          GiphyItemModel item = gifsList[index];
+
+                          debugPrint(
+                              'showing #${index + 1} of ${gifsList.length}');
+                          if (index + 1 >= gifsList.length) {
+                            context.read<GifTedCubit>().getMoreGifs(
+                                  currentList: gifsList,
+                                  offset: gifsOffset,
+                                );
+                          }
+
+                          return GifCard(
+                            item: item,
+                          );
+                        },
+                        childCount: gifsList.length,
+                      ),
                     ),
                   ),
-                ),
-              ),
-            ],
+                  const SliverPadding(
+                    padding: EdgeInsets.all(appGridPaddingDoubleLg),
+                    sliver: SliverToBoxAdapter(
+                      child: Center(
+                        child: SizedBox(
+                          height: 24,
+                          width: 24,
+                          child: CircularProgressIndicator(),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
           );
         } else {
           return const Center(
